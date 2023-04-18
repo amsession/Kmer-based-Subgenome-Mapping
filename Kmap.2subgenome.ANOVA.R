@@ -1,12 +1,12 @@
 #!/usr/local/bin/R
-#require(matrixStats);
+
 args<- commandArgs(trailingOnly = TRUE);
 csa.norm<-as.matrix(read.table(args[1],row=1,header=T));
-GC.tukey<-matrix(nrow=length(rownames(csa.norm)),ncol=10);
-colnames(GC.tukey)<-c("Group.df","Group.Sumsq","Group.MeanSq","Residual.df","Residual.Sumsq","Residual.MeanSq","Fvalue","Pr","Sub2-Sub1.diff","Sub2-Sub1.p");
+GC.tukey<-matrix(nrow=length(rownames(csa.norm)),ncol=12);
+colnames(GC.tukey)<-c("Group.df","Group.Sumsq","Group.MeanSq","Residual.df","Residual.Sumsq","Residual.MeanSq","Fvalue","Pr","Sub2-Sub1.diff","Sub2-Sub1.p","Sub2-Sub1.95l","Sub2-Sub1.95u");
 rownames(GC.tukey)<-rownames(csa.norm);
 subgenome1<-as.character(read.table(args[2])$V1);
-subgenome2<-as.character(read.table(args[2])$V2);
+subgenome2<-as.character(read.table(args[3])$V1);
 
 
 for(i in rownames(GC.tukey)){
@@ -19,10 +19,12 @@ GC.tukey[i,1]<-my.anova["Group","Df"];GC.tukey[i,2]<-my.anova["Group","Sum Sq"];
 
 my.aov<-aov(fit1);
 
-GC.tukey[i,9]<-TukeyHSD(my.aov)$Group["Sub2-Sub1","diff"];GC.tukey[i,10]<-TukeyHSD(my.aov)$Group["Sub2-Sub1","p adj"];
+my.Tukey<-TukeyHSD(my.aov);
+
+GC.tukey[i,9]<-my.Tukey$Group["Sub2-Sub1","diff"];GC.tukey[i,10]<-my.Tukey$Group["Sub2-Sub1","p adj"];GC.tukey[i,11]<-my.Tukey$Group["Sub2-Sub1","lwr"];GC.tukey[i,12]<-my.Tukey$Group["Sub2-Sub1","upr"];
 
 
 }
 
-write.table(GC.tukey,file=args[3],row=T,col=T,quote=F,sep="\t");
+write.table(GC.tukey,file=args[4],row=T,col=T,quote=F,sep="\t");
 
