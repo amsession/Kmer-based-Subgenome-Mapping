@@ -16,7 +16,7 @@ csa.norm[,i]<-csa.norm[,i]/chr.lengths[i,1];
 
 for(i in rownames(chr.tbl))
 {
-my.iter<-csa.norm[,c(as.character(my.dat[i,1]),as.character(my.dat[i,2]))];
+my.iter<-csa.norm[,c(as.character(chr.tbl[i,1]),as.character(chr.tbl[i,2]))];
 assign(paste("my.chr.dat.",i,sep=""),rownames(subset(my.iter,(my.iter[,1]/my.iter[,2])>=10 | (my.iter[,1]/my.iter[,2])<=1/10) | (my.iter[,1]/my.iter[,3)<=1/10) | (my.iter[,1]/my.iter[,3])>=10) | (my.iter[,2]/my.iter[,3)<=1/10) | (my.iter[,2]/my.iter[,3])>=10) | (my.iter[,1]/my.iter[,4)<=1/10) | (my.iter[,1]/my.iter[,4])>=10) | (my.iter[,2]/my.iter[,4)<=1/10) | (my.iter[,2]/my.iter[,4])>=10) | (my.iter[,3]/my.iter[,4)<=1/10) | (my.iter[,3]/my.iter[,4])>=10) ));
 }
 myobjects<-mget(ls(pattern="^my.chr.dat"));
